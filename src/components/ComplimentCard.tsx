@@ -1,8 +1,8 @@
 
-import React, { useEffect, useRef, useState } from 'react';
-import { BookOpen, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { BookOpen, Sparkles } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ComplimentCardProps {
   compliment: string;
@@ -38,20 +38,20 @@ const ComplimentCard: React.FC<ComplimentCardProps> = ({ compliment, name }) => 
           <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2 animate-float" />
         </div>
         <h3 className="text-xl font-medium text-primary mt-4 text-center">
-          {name ? `${name}, aqui está seu elogio!` : 'Seu elogio personalizado'}
+          Que incrível!
         </h3>
       </div>
 
       <div className="bg-secondary/30 p-5 rounded-lg">
         {sentences.map((sentence, index) => (
-          <motion.p 
+          <motion.p
             key={index}
             initial={{ opacity: 0, y: 10 }}
             animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
-            transition={{ 
-              duration: 0.5, 
+            transition={{
+              duration: 0.5,
               delay: 0.2 + (index * 0.1),
-              ease: "easeOut" 
+              ease: "easeOut"
             }}
             className="text-foreground leading-relaxed mb-3 last:mb-0"
           >
