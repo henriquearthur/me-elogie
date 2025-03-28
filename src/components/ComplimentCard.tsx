@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Heart, Sparkles } from 'lucide-react';
+import { BookOpen, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -29,20 +29,20 @@ const ComplimentCard: React.FC<ComplimentCardProps> = ({ compliment, name }) => 
       className={cn(
         "card-glow w-full max-w-xl mx-auto p-8 rounded-xl",
         "bg-white/60 backdrop-blur-md pastel-shadow",
-        "border-2 border-pastel-purple overflow-hidden"
+        "border-2 border-primary/50 overflow-hidden"
       )}
     >
       <div className="flex flex-col items-center mb-6">
         <div className="relative">
-          <Heart className="h-10 w-10 text-pastel-purple animate-pulse-gentle" />
-          <Sparkles className="h-5 w-5 text-pastel-violet absolute -top-2 -right-2 animate-float" />
+          <BookOpen className="h-10 w-10 text-primary animate-pulse-gentle" />
+          <Sparkles className="h-5 w-5 text-primary absolute -top-2 -right-2 animate-float" />
         </div>
         <h3 className="text-xl font-medium text-primary mt-4 text-center">
           {name ? `${name}, aqui está seu elogio!` : 'Seu elogio personalizado'}
         </h3>
       </div>
 
-      <div className="bg-pastel-lavender/30 p-5 rounded-lg">
+      <div className="bg-secondary/30 p-5 rounded-lg">
         {sentences.map((sentence, index) => (
           <motion.p 
             key={index}
@@ -64,3 +64,4 @@ const ComplimentCard: React.FC<ComplimentCardProps> = ({ compliment, name }) => 
 };
 
 export default ComplimentCard;
+

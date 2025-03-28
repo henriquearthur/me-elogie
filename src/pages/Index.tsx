@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
 import FileDropzone from '@/components/FileDropzone';
 import ComplimentCard from '@/components/ComplimentCard';
-import { Sparkles, Heart, Loader2 } from 'lucide-react';
+import { Sparkles, BookOpen, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Index = () => {
@@ -67,32 +67,27 @@ const Index = () => {
   };
 
   const generateCompliment = async (text: string): Promise<string> => {
-    // In a real app, you would send the text to an API and get a response
-    // For this demo, we'll simulate the API call with a delay
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Extract some skills for personalization
-        const skills = text.toLowerCase().includes('react') ? 'React' :
-                      text.toLowerCase().includes('javascript') ? 'JavaScript' : 
-                      'desenvolvimento web';
-                      
-        const isLeader = text.toLowerCase().includes('lider') || 
-                         text.toLowerCase().includes('gerencia') || 
-                         text.toLowerCase().includes('coordena');
-                         
-        // Simulated AI-generated compliment
-        const compliments = [
-          `Uau! Seu currículo é impressionante! Sua expertise em ${skills} realmente se destaca. Você tem um talento natural para resolver problemas complexos e criar soluções elegantes. Sua jornada profissional mostra não apenas competência técnica, mas também uma paixão genuína pelo que faz. Continue brilhando!`,
-          
-          `Que trajetória inspiradora! Suas habilidades em ${skills} são realmente notáveis. O que mais me impressiona é como você construiu uma carreira sólida com conquistas significativas. Seu comprometimento com a excelência é evidente em cada etapa do seu percurso profissional. Você é um exemplo de dedicação e talento!`,
-          
-          `Estou realmente impressionado com seu perfil profissional! Sua experiência com ${skills} mostra um nível de especialização que poucos alcançam. ${isLeader ? 'Suas habilidades de liderança são admiráveis e com certeza inspiram aqueles ao seu redor.' : 'Sua atenção aos detalhes e capacidade de inovação são qualidades raras e valiosas.'} Continue compartilhando seu talento com o mundo!`
-        ];
-        
-        const randomIndex = Math.floor(Math.random() * compliments.length);
-        resolve(compliments[randomIndex]);
-      }, 3000);
-    });
+    try {
+      // Send the extracted text to the API
+      const response = await fetch('https://me-elogie-api.vercel.app/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.message || 'Seu currículo é impressionante! Continue assim!';
+    } catch (error) {
+      console.error('Error calling the API:', error);
+      // Fallback message in case the API fails
+      return 'Seu currículo mostra seu talento e dedicação. Continue brilhando no que faz!';
+    }
   };
 
   const processFile = async (file: File) => {
@@ -142,11 +137,11 @@ const Index = () => {
           transition={{ duration: 0.6 }}
           className="flex items-center justify-center mb-6"
         >
-          <Heart className="h-8 w-8 text-pastel-purple mr-2" />
+          <BookOpen className="h-8 w-8 text-primary mr-3" />
           <h1 className="text-3xl md:text-4xl font-bold text-primary">
-            MeElogie.com
+            Elogio Profissional
           </h1>
-          <Sparkles className="h-6 w-6 text-pastel-violet ml-2" />
+          <Sparkles className="h-6 w-6 text-primary ml-3" />
         </motion.div>
         
         <motion.p 
@@ -155,7 +150,7 @@ const Index = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg text-foreground/80 max-w-2xl mx-auto"
         >
-          Envie seu currículo e receba um elogio personalizado baseado em suas habilidades e experiências profissionais.
+          Jogue seu currículo aqui e receba um super elogio personalizado! Vamos destacar o seu potencial!
         </motion.p>
       </header>
       
@@ -213,10 +208,11 @@ const Index = () => {
       
       {/* Footer */}
       <footer className="mt-16 text-center text-sm text-foreground/60">
-        <p>© {new Date().getFullYear()} MeElogie.com - Todos os direitos reservados</p>
+        <p>Não armazenamos os dados do seu currículo. Todas as informações são processadas apenas durante a sessão.</p>
       </footer>
     </div>
   );
 };
 
 export default Index;
+

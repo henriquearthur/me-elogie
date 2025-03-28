@@ -64,11 +64,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				pastel: {
-					lavender: '#E5DEFF',
-					violet: '#C5B4E3',
-					purple: '#9F91CC',
-					periwinkle: '#D3E4FD',
-					light: '#F1E6FF'
+					lavender: '#E0E4FF',
+					violet: '#B4BAE3',
+					purple: '#919ACC',
+					periwinkle: '#D5E5FD',
+					light: '#F0F0FF'
 				}
 			},
 			borderRadius: {
@@ -110,7 +110,7 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-				'pastel-gradient': 'linear-gradient(120deg, #E5DEFF 0%, #F1E6FF 50%, #C5B4E3 100%)'
+				'pastel-gradient': 'linear-gradient(120deg, #E0E4FF 0%, #F0F0FF 50%, #B4BAE3 100%)'
 			}
 		}
 	},

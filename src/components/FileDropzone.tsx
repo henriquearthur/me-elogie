@@ -88,10 +88,10 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileSelect, isProcessing 
         "card-glow w-full max-w-xl mx-auto p-8 rounded-xl transition-all duration-300 relative",
         "bg-white/60 backdrop-blur-md pastel-shadow border-2",
         isDragging 
-          ? "border-pastel-purple border-dashed bg-pastel-lavender/50" 
+          ? "border-primary border-dashed bg-secondary/50" 
           : fileName 
-            ? "border-pastel-purple border-solid" 
-            : "border-pastel-violet border-dashed",
+            ? "border-primary border-solid" 
+            : "border-primary/60 border-dashed",
         isProcessing && "opacity-70 pointer-events-none"
       )}
       onDragEnter={handleDragEnter}
@@ -102,7 +102,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileSelect, isProcessing 
       <div className="flex flex-col items-center justify-center text-center">
         {fileName ? (
           <div className="flex flex-col items-center gap-3">
-            <div className="h-14 w-14 bg-pastel-violet/20 rounded-full flex items-center justify-center">
+            <div className="h-14 w-14 bg-secondary/20 rounded-full flex items-center justify-center">
               <Check className="h-7 w-7 text-primary" />
             </div>
             <div className="flex flex-col">
@@ -114,7 +114,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileSelect, isProcessing 
           </div>
         ) : (
           <>
-            <div className="h-14 w-14 bg-pastel-violet/20 rounded-full flex items-center justify-center mb-4 animate-float">
+            <div className="h-14 w-14 bg-secondary/20 rounded-full flex items-center justify-center mb-4 animate-float">
               <UploadCloud className="h-7 w-7 text-primary" />
             </div>
             <h3 className="text-lg font-semibold text-primary mb-2">
@@ -163,3 +163,4 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileSelect, isProcessing 
 };
 
 export default FileDropzone;
+
