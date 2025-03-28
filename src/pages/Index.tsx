@@ -21,48 +21,66 @@ const Index = () => {
   };
 
   const extractTextFromPdf = async (file: File): Promise<string> => {
-    // In a real application, you would use a PDF parsing library
-    // For this demo, we'll simulate the text extraction with a delay
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // Simulated extracted text with skills and experience
-        const simulatedText = `
-          Currículo de Ana Silva
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      
+      reader.onload = async (event) => {
+        try {
+          // Use PDF.js to extract text
+          const pdfjs = await import('pdfjs-dist/build/pdf');
+          const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
           
-          EXPERIÊNCIA PROFISSIONAL
+          pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
           
-          Desenvolvedora Front-end Senior - TechCorp (2020-Atual)
-          • Liderou equipe de 5 desenvolvedores em projetos de alta visibilidade
-          • Implementou novas arquiteturas React que melhoraram o desempenho em 40%
-          • Mentorou desenvolvedores juniores e conduziu code reviews regularmente
+          const typedArray = new Uint8Array(event.target?.result as ArrayBuffer);
+          const loadingTask = pdfjs.getDocument({ data: typedArray });
           
-          Desenvolvedora Web - WebSolutions (2017-2020)
-          • Trabalhou em projetos full-stack usando Node.js e React
-          • Implementou testes automatizados que aumentaram a cobertura de código em 70%
+          const pdf = await loadingTask.promise;
+          let extractedText = '';
           
-          HABILIDADES
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items
+              .map((item: any) => item.str)
+              .join(' ');
+            
+            extractedText += pageText + '\n';
+          }
           
-          • React, Vue.js, Angular
-          • JavaScript/TypeScript avançado
-          • CSS/SASS e design responsivo
-          • Metodologias ágeis e liderança técnica
-          • Otimização de performance web
-          
-          EDUCAÇÃO
-          
-          Bacharelado em Ciência da Computação - Universidade Federal (2013-2017)
-        `;
-        resolve(simulatedText);
-      }, 2000);
+          resolve(extractedText);
+        } catch (error) {
+          console.error('Error extracting text from PDF:', error);
+          reject(error);
+        }
+      };
+      
+      reader.onerror = (error) => {
+        console.error('Error reading file:', error);
+        reject(error);
+      };
+      
+      reader.readAsArrayBuffer(file);
     });
   };
 
   const extractNameFromText = (text: string): string | null => {
-    // Simple regex to extract a name from text like "Currículo de {Nome}"
-    const nameMatch = text.match(/Currículo de\s+([A-Za-zÀ-ÖØ-öø-ÿ\s]+)/i);
-    if (nameMatch && nameMatch[1]) {
-      return nameMatch[1].trim().split(' ')[0]; // Get just the first name
+    // Simple regex to extract a name from common resume formats
+    const patterns = [
+      /nome:?\s+([A-Za-zÀ-ÖØ-öø-ÿ\s]+?)(?:\r|\n|$)/i,
+      /currículo\s+(?:de|do|da)\s+([A-Za-zÀ-ÖØ-öø-ÿ\s]+?)(?:\r|\n|$)/i,
+      /^([A-Za-zÀ-ÖØ-öø-ÿ\s]{2,30})(?:\r|\n|$)/i, // First line if it looks like a name
+    ];
+    
+    for (const pattern of patterns) {
+      const match = text.match(pattern);
+      if (match && match[1]) {
+        const fullName = match[1].trim();
+        const firstName = fullName.split(' ')[0]; // Get just the first name
+        return firstName;
+      }
     }
+    
     return null;
   };
 
@@ -82,11 +100,10 @@ const Index = () => {
       }
 
       const data = await response.json();
-      return data.message || 'Seu currículo é impressionante! Continue assim!';
+      return data.message || 'Não foi possível gerar um elogio. Por favor, tente novamente.';
     } catch (error) {
       console.error('Error calling the API:', error);
-      // Fallback message in case the API fails
-      return 'Seu currículo mostra seu talento e dedicação. Continue brilhando no que faz!';
+      throw error;
     }
   };
 
@@ -120,6 +137,7 @@ const Index = () => {
         description: "Não foi possível processar seu arquivo. Tente novamente.",
         variant: "destructive"
       });
+      setCompliment("Não foi possível gerar um elogio. Por favor, tente novamente.");
     } finally {
       setIsProcessing(false);
     }
@@ -139,7 +157,7 @@ const Index = () => {
         >
           <BookOpen className="h-8 w-8 text-primary mr-3" />
           <h1 className="text-3xl md:text-4xl font-bold text-primary">
-            Elogio Profissional
+            Me Elogie
           </h1>
           <Sparkles className="h-6 w-6 text-primary ml-3" />
         </motion.div>
@@ -215,4 +233,3 @@ const Index = () => {
 };
 
 export default Index;
-
