@@ -168,7 +168,7 @@ const Index = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg text-foreground/80 max-w-2xl mx-auto"
           >
-            Jogue seu currículo aqui e receba um verdadeiro elogeiro!
+            Jogue seu currículo aqui e receba um verdadeiro elogio!
             <br />
             Vamos descobrir seu potencial
           </motion.p>
