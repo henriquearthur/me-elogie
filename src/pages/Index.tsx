@@ -6,6 +6,11 @@ import FileDropzone from '@/components/FileDropzone';
 import ComplimentCard from '@/components/ComplimentCard';
 import { Sparkles, BookOpen, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import * as pdfjs from 'pdfjs-dist';
+import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
+
+// Set the worker source path
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Index = () => {
   const [pdfFile, setPdfFile] = useState<File | null>(null);
@@ -26,15 +31,10 @@ const Index = () => {
       
       reader.onload = async (event) => {
         try {
-          // Use PDF.js to extract text
-          const pdfjs = await import('pdfjs-dist/build/pdf');
-          const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+          const arrayBuffer = event.target?.result as ArrayBuffer;
+          const typedArray = new Uint8Array(arrayBuffer);
           
-          pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-          
-          const typedArray = new Uint8Array(event.target?.result as ArrayBuffer);
           const loadingTask = pdfjs.getDocument({ data: typedArray });
-          
           const pdf = await loadingTask.promise;
           let extractedText = '';
           
