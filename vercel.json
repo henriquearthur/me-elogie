@@ -18,6 +18,10 @@
             "dest": "/manifest.json"
         },
         {
+            "src": "/pdf.worker.min.mjs",
+            "dest": "/public/pdf.worker.min.mjs"
+        },
+        {
             "src": "/(.*)",
             "dest": "/index.html"
         }
