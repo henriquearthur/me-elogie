@@ -1,8 +1,9 @@
-
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { BookOpen, Sparkles } from 'lucide-react';
+import { BookOpen, Check, Copy, Sparkles } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from './ui/button';
 
 interface ComplimentCardProps {
   compliment: string;
@@ -12,10 +13,30 @@ interface ComplimentCardProps {
 const ComplimentCard: React.FC<ComplimentCardProps> = ({ compliment, name }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     setIsVisible(true);
   }, [compliment]);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(compliment);
+      setCopied(true);
+      toast({
+        title: "Copiado!",
+        description: "O elogio foi copiado para sua área de transferência.",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast({
+        title: "Erro ao copiar",
+        description: "Não foi possível copiar o texto.",
+        variant: "destructive"
+      });
+    }
+  };
 
   // Split the compliment into sentences for staggered animation
   const sentences = compliment.split(/(?<=[.!?])\s+/);
@@ -42,7 +63,19 @@ const ComplimentCard: React.FC<ComplimentCardProps> = ({ compliment, name }) => 
         </h3>
       </div>
 
-      <div className="bg-secondary/30 p-5 rounded-lg">
+      <div className="relative bg-secondary/30 p-5 rounded-lg">
+        <Button
+          variant="outline"
+          size="icon"
+          className="absolute right-0 top-0 m-2.5"
+          onClick={handleCopy}
+        >
+          {copied ? (
+            <Check className="h-4 w-4 text-green-500" />
+          ) : (
+            <Copy className="h-4 w-4" />
+          )}
+        </Button>
         {sentences.map((sentence, index) => (
           <motion.p
             key={index}
