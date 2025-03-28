@@ -1,7 +1,7 @@
 
 import React, { useCallback, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { FileUpload, UploadCloud, Check, AlertCircle } from 'lucide-react';
+import { Upload, UploadCloud, Check, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface FileDropzoneProps {
@@ -144,7 +144,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onFileSelect, isProcessing 
             htmlFor="file-upload" 
             className="mt-6 inline-flex items-center px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors cursor-pointer"
           >
-            <FileUpload className="h-4 w-4 mr-2" />
+            <Upload className="h-4 w-4 mr-2" />
             Selecionar arquivo
           </label>
         )}
